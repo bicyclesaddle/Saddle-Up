@@ -1,0 +1,169 @@
+
+
+html
+Copy code
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <style>
+        .calculator-container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body><div class="calculator-container">
+  <div class="input-group">
+    <div style="font-weight: bold; margin-bottom: 10px;">
+      CdA: <span style="font-weight: normal; font-size: smaller;">Calculated from above or enter your own</span>
+    </div>
+    <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+      <div style="flex: 1; margin-right: 10px;">
+        <label for="cda-test1">Test 1:</label>
+        <input type="number" step="0.02" id="cda-test1" oninput="calculate()">
+      </div>
+      <div style="flex: 1; margin-right: 10px;">
+        <label for="cda-test2">Test 2:</label>
+        <input type="number" step="0.02" id="cda-test2" oninput="calculate()">
+      </div>
+      <div style="flex: 1; margin-right: 10px;">
+        <label for="cda-test3">Test 3:</label>
+        <input type="number" step="0.02" id="cda-test3" oninput="calculate()">
+      </div>
+      <div style="flex: 1; margin-left: 10px;">
+        <label for="cda-average">Average:</label>
+        <input type="number" step="any" id="cda-average" readonly>
+      </div>
+    </div>
+  </div>
+
+  <div class="input-group" style="display: flex; justify-content: space-between; margin-top: 10px;">
+    <div style="flex: 1; margin-right: 10px;">
+      <label for="weight-race">Body Weight:</label>
+      <input type="number" step="any" id="weight-race" placeholder="kg" required oninput="calculate()">
+    </div>
+    <div style="flex: 1; margin-left: 10px;">
+      <label for="bike-weight-race">Bike Weight:</label>
+      <input type="number" step="any" id="bike-weight-race" placeholder="kg" required oninput="calculate()">
+    </div>
+  </div>
+
+  <div class="input-group">
+    <label for="race-air-density">Air Density (kg/m³):</label>
+    <select id="race-air-density" onchange="calculate()">
+      <option value="1.235">1.235 (Spring, UK)</option>
+      <option value="1.215">1.215 (Summer, UK)</option>
+      <option value="1.240">1.240 (Autumn, UK)</option>
+      <option value="1.250">1.250 (Winter, UK)</option>
+      <option value="1.225" selected>1.225 (Sea Level, 15°C)</option>
+      <option value="1.184">1.184 (500m, 15°C)</option>
+      <option value="1.150">1.150 (1000m, 15°C)</option>
+      <option value="1.116">1.116 (1500m, 15°C)</option>
+      <option value="1.082">1.082 (2000m, 15°C)</option>
+    </select>
+  </div>
+
+  <div class="input-group">
+    <label for="race-crr">Rolling Resistance (Crr):</label>
+    <select id="race-crr" onchange="calculate()">
+<option value="0.0025">Indoor Track (0.0025)</option>
+<option value="0.0038">Outdoor Track (0.0038)</option>
+<option value="0.0045" selected>Smooth Asphalt, Race Tyres (0.0045)</option>
+<option value="0.0050">Standard Asphalt, Commuter Tyres (0.0050)</option>
+<option value="0.0058">Rough Asphalt / Chip Seal (0.0058)</option>
+<option value="0.0065">Packed Dirt (0.0065)</option>
+<option value="0.0075">Gravel Path (0.0075)</option>
+<option value="0.0080">Grass Field (0.0080)</option>
+<option value="0.0105">Soft Soil / Mud (0.0105)</option>
+    </select>
+  </div>
+
+  <div class="input-group">
+    <label for="drivetrain_efficiency-race">Drivetrain Efficiency:</label>
+    <select id="drivetrain_efficiency-race" onchange="calculate()">
+<option value="0.98">New chain, ceramic bearings, large chainring/sprocket (98%)</option>
+<option value="0.965">New chain, ceramic bearings, small chainring/sprocket (96.5%)</option>
+<option value="0.96" selected>New chain, steel bearings, proper lubrication (96%)</option>
+<option value="0.95">New chain, minimal lubrication (95%)</option>
+<option value="0.94">Standard maintained chain, insufficient lubrication (94%)</option>
+<option value="0.92">Old, worn chain, insufficient lubrication (92%)</option>
+</select>
+
+  </div>
+
+  <div class="input-group" style="display: flex; justify-content: space-between;">
+    <div style="flex: 1; margin-right: 10px;">
+      <label for="race-wind-speed">Wind Speed:</label>
+      <input type="number" step="any" id="race-wind-speed" value="0" oninput="calculate()" onfocus="setPlaceholder('race-wind-speed', ' km/h')" onblur="clearPlaceholder('race-wind-speed', ' km/h')">
+    </div>
+    <div style="flex: 1; margin-right: 10px;">
+      <label for="race-wind-angle">Wind Angle:</label>
+      <input type="number" step="any" id="race-wind-angle" value="0" oninput="calculate()" onfocus="setPlaceholder('race-wind-angle', ' deg')" onblur="clearPlaceholder('race-wind-angle', ' deg')">
+    </div>
+    <div style="flex: 1;">
+      <label for="race-gradient">Avg Grade:</label>
+      <input type="number" step="any" id="race-gradient" value="0" oninput="calculate()" onfocus="setPlaceholder('race-gradient', ' %')" onblur="clearPlaceholder('race-gradient', ' %')">
+    </div>
+  </div>
+
+  <div class="input-group">
+    <label for="calc-mode">Calculation Mode:</label>
+    <select id="calc-mode" onchange="toggleCalculationMode(); calculate()">
+      <option value="" disabled selected>Select</option>
+      <option value="race-time">Calculate Race Time</option>
+      <option value="required-power">Calculate Required Power</option>
+      <option value="race-distance">Calculate Race Distance</option>
+    </select>
+  </div>
+  
+  <div class="input-group" style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+    <div style="flex: 1; margin-right: 10px;">
+      <label for="input-race-distance">Distance:</label>
+      <input type="number" step="any" id="input-race-distance" placeholder="km" required oninput="calculate()">
+    </div>
+    <div style="flex: 1; margin-right: 10px;" id="power-input-group">
+      <label for="race-power">Power:</label>
+      <input type="number" step="any" id="race-power" placeholder="watts" required oninput="calculate()">
+    </div>
+    <div style="flex: 1;" id="time-input-group" style="display: none;">
+      <label for="desired-time">Time:</label>
+      <input type="text" id="desired-time" placeholder="mm:ss" pattern="([0-5]?[0-9]):([0-5][0-9])" required oninput="calculate()">
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+
+  <div class="calculator-container">
+
+    <label>Race Prediction:</label>
+    <div class="results-container">
+      <div class="result">
+        <div id="result" class="result-column"></div>
+      </div>
+  </div>
+</div>
+
+
+</body>
+</html>
