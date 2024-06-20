@@ -32,45 +32,37 @@ Copy code
         }
     </style>
 </head>
-<body><div class="calculator-container">
-  <div class="input-group">
-    <div style="font-weight: bold; margin-bottom: 10px;">
-      CdA: <span style="font-weight: normal; font-size: smaller;">Calculated from above or enter your own</span>
-    </div>
-    <div style="display: flex; justify-content: space-between; margin-top: 10px;">
-      <div style="flex: 1; margin-right: 10px;">
-        <label for="cda-test1">Test 1:</label>
-        <input type="number" step="0.02" id="cda-test1" oninput="calculate()">
-      </div>
-      <div style="flex: 1; margin-right: 10px;">
-        <label for="cda-test2">Test 2:</label>
-        <input type="number" step="0.02" id="cda-test2" oninput="calculate()">
-      </div>
-      <div style="flex: 1; margin-right: 10px;">
-        <label for="cda-test3">Test 3:</label>
-        <input type="number" step="0.02" id="cda-test3" oninput="calculate()">
-      </div>
-      <div style="flex: 1; margin-left: 10px;">
-        <label for="cda-average">Average:</label>
-        <input type="number" step="any" id="cda-average" readonly>
-      </div>
-    </div>
-  </div>
-
-  <div class="input-group" style="display: flex; justify-content: space-between; margin-top: 10px;">
+<body>
+<div class="calculator-container" id="cda">
+  <div class="input-group" style="display: flex; justify-content: space-between;">
     <div style="flex: 1; margin-right: 10px;">
-      <label for="weight-race">Body Weight:</label>
-      <input type="number" step="any" id="weight-race" placeholder="kg" required oninput="calculate()">
+      <label for="weight-cda">Body Weight:</label>
+      <input type="number" step="any" id="weight-cda" placeholder="kg" required>
     </div>
-    <div style="flex: 1; margin-left: 10px;">
-      <label for="bike-weight-race">Bike Weight:</label>
-      <input type="number" step="any" id="bike-weight-race" placeholder="kg" required oninput="calculate()">
+    <div style="flex: 1;">
+      <label for="bike_weight-cda">Bike Weight:</label>
+      <input type="number" step="any" id="bike_weight-cda" placeholder="kg" required>
     </div>
   </div>
 
   <div class="input-group">
-    <label for="race-air-density">Air Density (kg/m³):</label>
-    <select id="race-air-density" onchange="calculate()">
+    <label for="rolling_resistance-cda">Rolling Resistance (Crr):</label>
+    <select id="rolling_resistance-cda">
+<option value="0.0025">Indoor Track (0.0025)</option>
+<option value="0.0038">Outdoor Track (0.0038)</option>
+<option value="0.0045" selected>Smooth Asphalt, Race Tyres (0.0045)</option>
+<option value="0.0050">Standard Asphalt, Commuter Tyres (0.0050)</option>
+<option value="0.0058">Rough Asphalt / Chip Seal (0.0058)</option>
+<option value="0.0065">Packed Dirt (0.0065)</option>
+<option value="0.0075">Gravel Path (0.0075)</option>
+<option value="0.0080">Grass Field (0.0080)</option>
+<option value="0.0105">Soft Soil / Mud (0.0105)</option>
+    </select>
+  </div>
+  
+  <div class="input-group">
+    <label for="air_density-cda">Air Density (kg/m³):</label>
+    <select id="air_density-cda">
       <option value="1.235">1.235 (Spring, UK)</option>
       <option value="1.215">1.215 (Summer, UK)</option>
       <option value="1.240">1.240 (Autumn, UK)</option>
@@ -84,23 +76,8 @@ Copy code
   </div>
 
   <div class="input-group">
-    <label for="race-crr">Rolling Resistance (Crr):</label>
-    <select id="race-crr" onchange="calculate()">
-<option value="0.0025">Indoor Track (0.0025)</option>
-<option value="0.0038">Outdoor Track (0.0038)</option>
-<option value="0.0045" selected>Smooth Asphalt, Race Tyres (0.0045)</option>
-<option value="0.0050">Standard Asphalt, Commuter Tyres (0.0050)</option>
-<option value="0.0058">Rough Asphalt / Chip Seal (0.0058)</option>
-<option value="0.0065">Packed Dirt (0.0065)</option>
-<option value="0.0075">Gravel Path (0.0075)</option>
-<option value="0.0080">Grass Field (0.0080)</option>
-<option value="0.0105">Soft Soil / Mud (0.0105)</option>
-    </select>
-  </div>
-
-  <div class="input-group">
-    <label for="drivetrain_efficiency-race">Drivetrain Efficiency:</label>
-    <select id="drivetrain_efficiency-race" onchange="calculate()">
+    <label for="drivetrain-efficiency">Drivetrain Efficiency:</label>
+    <select id="drivetrain_efficiency-cda">
 <option value="0.98">New chain, ceramic bearings, large chainring/sprocket (98%)</option>
 <option value="0.965">New chain, ceramic bearings, small chainring/sprocket (96.5%)</option>
 <option value="0.96" selected>New chain, steel bearings, proper lubrication (96%)</option>
@@ -111,59 +88,283 @@ Copy code
 
   </div>
 
+ <hr class="dashed">
+<div class="input-group">
+  <label for="test1-name"></label>
+  <input type="text" id="test1-name" placeholder="Test 1">
+</div>
+<div class="input-group" style="display: flex; justify-content: space-between;">
+  <div style="flex: 1; margin-right: 10px;">
+    <label for="power-test1">Power:</label>
+    <input type="number" step="any" id="power-test1" placeholder="watts">
+  </div>
+  <div style="flex: 1; margin-right: 10px;">
+    <label for="distance-test1">Distance:</label>
+    <input type="number" step="any" id="distance-test1" placeholder="km">
+  </div>
+  <div style="flex: 1;">
+    <label for="time-test1">Time:</label>
+    <input type="text" id="time-test1" placeholder="mm:ss" pattern="([0-5]?[0-9]):([0-5][0-9])" title="Enter a valid time in the format mm:ss" required>
+  </div>
+</div>
+
+
   <div class="input-group" style="display: flex; justify-content: space-between;">
     <div style="flex: 1; margin-right: 10px;">
-      <label for="race-wind-speed">Wind Speed:</label>
-      <input type="number" step="any" id="race-wind-speed" value="0" oninput="calculate()" onfocus="setPlaceholder('race-wind-speed', ' km/h')" onblur="clearPlaceholder('race-wind-speed', ' km/h')">
+      <label for="wind_speed-test1">Wind Speed:</label>
+      <input type="number" step="any" id="wind_speed-test1" placeholder="km/h" value="0" onfocus="setPlaceholder('wind_speed-test1', ' km/h')" onblur="clearPlaceholder('wind_speed-test1', ' km/h')">
     </div>
     <div style="flex: 1; margin-right: 10px;">
-      <label for="race-wind-angle">Wind Angle:</label>
-      <input type="number" step="any" id="race-wind-angle" value="0" oninput="calculate()" onfocus="setPlaceholder('race-wind-angle', ' deg')" onblur="clearPlaceholder('race-wind-angle', ' deg')">
+      <label for="yaw_angle-test1">Wind Angle:</label>
+      <input type="number" step="any" id="yaw_angle-test1" placeholder="degrees" value="0" onfocus="setPlaceholder('yaw_angle-test1', ' degrees')" onblur="clearPlaceholder('yaw_angle-test1', ' degrees')">
     </div>
     <div style="flex: 1;">
-      <label for="race-gradient">Avg Grade:</label>
-      <input type="number" step="any" id="race-gradient" value="0" oninput="calculate()" onfocus="setPlaceholder('race-gradient', ' %')" onblur="clearPlaceholder('race-gradient', ' %')">
+      <label for="gradient-test1">Avg Grade:</label>
+      <input type="number" step="any" id="gradient-test1" placeholder="%" value="0" onfocus="setPlaceholder('gradient-test1', ' %')" onblur="clearPlaceholder('gradient-test1', ' %')">
     </div>
   </div>
 
+  <hr class="dashed">
   <div class="input-group">
-    <label for="calc-mode">Calculation Mode:</label>
-    <select id="calc-mode" onchange="toggleCalculationMode(); calculate()">
-      <option value="" disabled selected>Select</option>
-      <option value="race-time">Calculate Race Time</option>
-      <option value="required-power">Calculate Required Power</option>
-      <option value="race-distance">Calculate Race Distance</option>
-    </select>
+    <label for="test2-name"></label>
+    <input type="text" id="test2-name" placeholder="Test 2">
   </div>
-  
-  <div class="input-group" style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+<div class="input-group" style="display: flex; justify-content: space-between;">
+  <div style="flex: 1; margin-right: 10px;">
+    <label for="power-test2">Power:</label>
+    <input type="number" step="any" id="power-test2" placeholder="watts">
+  </div>
+  <div style="flex: 1; margin-right: 10px;">
+    <label for="distance-test2">Distance:</label>
+    <input type="number" step="any" id="distance-test2" placeholder="km">
+  </div>
+  <div style="flex: 1;">
+    <label for="time-test2">Time:</label>
+    <input type="text" id="time-test2" placeholder="mm:ss" pattern="([0-5]?[0-9]):([0-5][0-9])" title="Enter a valid time in the format mm:ss" required>
+  </div>
+</div>
+
+  <div class="input-group" style="display: flex; justify-content: space-between;">
     <div style="flex: 1; margin-right: 10px;">
-      <label for="input-race-distance">Distance:</label>
-      <input type="number" step="any" id="input-race-distance" placeholder="km" required oninput="calculate()">
+      <label for="wind_speed-test2">Wind Speed:</label>
+      <input type="number" step="any" id="wind_speed-test2" placeholder="km/h" value="0" onfocus="setPlaceholder('wind_speed-test2', ' km/h')" onblur="clearPlaceholder('wind_speed-test2', ' km/h')">
     </div>
-    <div style="flex: 1; margin-right: 10px;" id="power-input-group">
-      <label for="race-power">Power:</label>
-      <input type="number" step="any" id="race-power" placeholder="watts" required oninput="calculate()">
+    <div style="flex: 1; margin-right: 10px;">
+      <label for="yaw_angle-test2">Wind Angle:</label>
+      <input type="number" step="any" id="yaw_angle-test2" placeholder="degrees" value="0" onfocus="setPlaceholder('yaw_angle-test2', ' degrees')" onblur="clearPlaceholder('yaw_angle-test2', ' degrees')">
     </div>
-    <div style="flex: 1;" id="time-input-group" style="display: none;">
-      <label for="desired-time">Time:</label>
-      <input type="text" id="desired-time" placeholder="mm:ss" pattern="([0-5]?[0-9]):([0-5][0-9])" required oninput="calculate()">
+    <div style="flex: 1;">
+      <label for="gradient-test2">Avg Grade:</label>
+      <input type="number" step="any" id="gradient-test2" placeholder="%" value="0" onfocus="setPlaceholder('gradient-test2', ' %')" onblur="clearPlaceholder('gradient-test2', ' %')">
     </div>
   </div>
+
+
+  
+  <hr class="dashed">
+  <div class="input-group">
+    <label for="test3-name"></label>
+    <input type="text" id="test3-name" placeholder="Test 3">
+  </div>
+  <div class="input-group" style="display: flex; justify-content: space-between;">
+    <div style="flex: 1; margin-right: 10px;">
+      <label for="power-test3">Power:</label>
+      <input type="number" step="any" id="power-test3" placeholder="watts">
+    </div>
+    <div style="flex: 1; margin-right: 10px;">
+          <label for="distance-test3">Distance:</label>
+      <input type="number" step="any" id="distance-test3" placeholder="km">
+     </div>
+    <div style="flex: 1;">
+       <label for="time-test3">Time:</label>
+      <input type="text" id="time-test3" placeholder="mm:ss" pattern="([0-5]?[0-9]):([0-5][0-9])" title="Enter a valid time in the format mm:ss" required>
+  </div>
+  </div>
+  <div class="input-group" style="display: flex; justify-content: space-between;">
+    <div style="flex: 1; margin-right: 10px;">
+      <label for="wind_speed-test3">Wind Speed:</label>
+      <input type="number" step="any" id="wind_speed-test3" placeholder="km/h" value="0" onfocus="setPlaceholder('wind_speed-test3', ' km/h')" onblur="clearPlaceholder('wind_speed-test3', ' km/h')">
+    </div>
+    <div style="flex: 1; margin-right: 10px;">
+      <label for="yaw_angle-test3">Wind Angle:</label>
+      <input type="number" step="any" id="yaw_angle-test3" placeholder="degrees" value="0" onfocus="setPlaceholder('yaw_angle-test3', ' degrees')" onblur="clearPlaceholder('yaw_angle-test3', ' degrees')">
+    </div>
+    <div style="flex: 1;">
+      <label for="gradient-test3">Avg Grade:</label>
+      <input type="number" step="any" id="gradient-test3" placeholder="%" value="0" onfocus="setPlaceholder('gradient-test3', ' %')" onblur="clearPlaceholder('gradient-test3', ' %')">
+    </div>
+  </div>
+
 </div>
-
-<script src="script.js"></script>
-
-  <div class="calculator-container">
-
-    <label>Race Prediction:</label>
-    <div class="results-container">
+<div class="calculator-container">
+  <div class="zones">
+    <label>CdA Results:</label>
+    <div class="results-container hidden">
       <div class="result">
-        <div id="result" class="result-column"></div>
+        <div id="cdaResults-test1" class="result-column"></div>
+        <div id="cdaResults-test2" class="result-column"></div>
+        <div id="cdaResults-test3" class="result-column"></div>
       </div>
+      <div class="result">
+        <div id="cdaResults-average" class="result-column"></div>
+        <div id="cdaResults-difference" class="result-column"></div>
+      </div>
+      <div class="result">
+        <canvas id="cdaBarChart" height="400" class="result-column" style="width: 100%;"></canvas>
+      </div>
+      <div class="result">
+        <div id="cdaResults-power-savings" class="result-column"></div>
+      </div>
+    </div>
   </div>
 </div>
 
+<script>
+function updateGraph(testNames, cdaValues, averageCdA, wattsPerCdaValues) {
+    const ctx = document.getElementById('cdaBarChart').getContext('2d');
 
+    const barColors = [
+        'rgba(75, 192, 192, 0.6)',
+        'rgba(255, 99, 132, 0.6)',
+        'rgba(54, 162, 235, 0.6)',
+        'rgba(255, 206, 86, 0.6)',
+        'rgba(153, 102, 255, 0.6)',
+        'rgba(255, 159, 64, 0.6)',
+        'rgba(199, 199, 199, 0.6)',
+        'rgba(83, 102, 255, 0.6)',
+        'rgba(99, 255, 132, 0.6)',
+        'rgba(235, 54, 162, 0.6)',
+        'rgba(206, 255, 86, 0.6)',
+        'rgba(102, 153, 255, 0.6)',
+        'rgba(159, 64, 255, 0.6)',
+        'rgba(255, 199, 199, 0.6)',
+        'rgba(192, 75, 75, 0.6)'
+    ];
+
+    if (cdaBarChart) {
+        cdaBarChart.data.labels = testNames;
+        cdaBarChart.data.datasets[0].data = cdaValues;
+        cdaBarChart.data.datasets[0].backgroundColor = barColors.slice(0, cdaValues.length);
+        cdaBarChart.data.datasets[1].data = new Array(cdaValues.length).fill(averageCdA);
+        cdaBarChart.data.datasets[2].data = wattsPerCdaValues;
+        cdaBarChart.update();
+    } else {
+        cdaBarChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: testNames, // Set the labels to the test names
+                datasets: [
+                    {
+                        label: 'CdA Values',
+                        data: cdaValues,
+                        backgroundColor: barColors.slice(0, cdaValues.length),
+                        borderColor: barColors.slice(0, cdaValues.length).map(color => color.replace('0.6', '1')),
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Average CdA',
+                        data: new Array(cdaValues.length).fill(averageCdA),
+                        type: 'line',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 2,
+                        fill: false,
+                        lineTension: 0,
+                        yAxisID: 'y'
+                    },
+                    {
+                        label: 'Watts/CdA',
+                        data: wattsPerCdaValues,
+                        type: 'line',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 3,
+                        fill: false,
+                        lineTension: 0,
+                        yAxisID: 'y1',
+                        borderDash: [10, 5], // Add dashed line
+                        pointBackgroundColor: 'rgba(54, 162, 235, 1)', // Add point markers
+                        pointBorderColor: 'rgba(54, 162, 235, 1)',
+                        pointRadius: 5
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true, 
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'CdA',
+                            font: {
+                                size: 16,
+                                weight: 'bold',
+                                family: 'Helvetica, Arial, sans-serif'
+                            }
+                        },
+                        ticks: {
+                            font: {
+                                size: 14
+                            },
+                            stepSize: 0.025 // Set the step size to spread out the tick marks
+                        }
+                    },
+                    y1: {
+                        beginAtZero: true,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'Watts/CdA (W/m²)',
+                            font: {
+                                size: 16,
+                                weight: 'bold',
+                                family: 'Helvetica, Arial, sans-serif'
+                            }
+                        },
+                        ticks: {
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Test',
+                            font: {
+                                size: 16,
+                                weight: 'bold',
+                                family: 'Helvetica, Arial, sans-serif'
+                            }
+                        },
+                        ticks: {
+                            font: {
+                                size: 14
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                if (context.dataset.label === 'Watts/CdA') {
+                                    return `Watts/CdA: ${context.parsed.y}`;
+                                }
+                                return `CdA: ${context.parsed.y.toFixed(4)}`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+}
+
+
+</script>
 </body>
 </html>
